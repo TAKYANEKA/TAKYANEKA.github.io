@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAM Store - Revente de Mémoire</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(15, 20, 40, 0.6);
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(102, 255, 204, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 255, 204, 0.1);
+        }
+
+        h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, #66ffcc, #4dd9b3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #66ffcc;
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: rgba(20, 25, 45, 0.8);
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid rgba(102, 255, 204, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 255, 204, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .product-card:hover::before {
+            left: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: #66ffcc;
+            box-shadow: 0 12px 40px rgba(102, 255, 204, 0.3);
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .product-type {
+            font-size: 1.5em;
+            color: #66ffcc;
+            font-weight: bold;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, #66ffcc, #4dd9b3);
+            color: #0a0e27;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .specs {
+            margin: 15px 0;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(102, 255, 204, 0.1);
+        }
+
+        .spec-label {
+            color: #a0a0a0;
+        }
+
+        .spec-value {
+            color: #66ffcc;
+            font-weight: 600;
+        }
+
+        .price-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(102, 255, 204, 0.2);
+        }
+
+        .price {
+            font-size: 2em;
+            color: #66ffcc;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .price-per-gb {
+            text-align: center;
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+
+        .buy-button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #66ffcc, #4dd9b3);
+            color: #0a0e27;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .buy-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(102, 255, 204, 0.5);
+        }
+
+        .info-banner {
+            background: rgba(102, 255, 204, 0.1);
+            border-left: 4px solid #66ffcc;
+            padding: 15px 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .info-banner p {
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            color: #a0a0a0;
+            border-top: 1px solid rgba(102, 255, 204, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 RAM Store</h1>
+            <p class="subtitle">Revente de barrettes mémoire DDR2 à DDR5</p>
+        </header>
+
+        <div class="info-banner">
+            <p><strong>Prix compétitifs</strong> • Tous nos produits sont testés et garantis • Livraison rapide disponible</p>
+        </div>
+
+        <h2 style="color: #66ffcc; margin-bottom: 20px; text-align: center;">💾 DDR2 - Format DIMM</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR2 2GB</span>
+                    <span class="badge">DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">2 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">800 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR2 DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">48€</div>
+                    <div class="price-per-gb">24€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR2 4GB</span>
+                    <span class="badge">DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">4 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">800 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR2 DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">96€</div>
+                    <div class="price-per-gb">24€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="color: #66ffcc; margin: 40px 0 20px 0; text-align: center;">💾 DDR2 - Format SO-DIMM</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR2 2GB</span>
+                    <span class="badge">SO-DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">2 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">667 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR2 SO-DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">56€</div>
+                    <div class="price-per-gb">28€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR2 4GB</span>
+                    <span class="badge">SO-DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">4 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">800 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR2 SO-DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">112€</div>
+                    <div class="price-per-gb">28€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="color: #66ffcc; margin: 40px 0 20px 0; text-align: center;">⚡ DDR3 - Format DIMM</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR3 4GB</span>
+                    <span class="badge">DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">4 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">1600 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR3 DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">72€</div>
+                    <div class="price-per-gb">18€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR3 8GB</span>
+                    <span class="badge">DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">8 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">1600 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR3 DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">128€</div>
+                    <div class="price-per-gb">16€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR3 16GB</span>
+                    <span class="badge">DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">16 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">1600 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR3 DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">240€</div>
+                    <div class="price-per-gb">15€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="color: #66ffcc; margin: 40px 0 20px 0; text-align: center;">⚡ DDR3 - Format SO-DIMM</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR3 4GB</span>
+                    <span class="badge">SO-DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">4 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">1600 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR3 SO-DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">80€</div>
+                    <div class="price-per-gb">20€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR3 8GB</span>
+                    <span class="badge">SO-DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">8 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">1600 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR3 SO-DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">144€</div>
+                    <div class="price-per-gb">18€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="color: #66ffcc; margin: 40px 0 20px 0; text-align: center;">🚀 DDR4 - Format DIMM</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR4 8GB</span>
+                    <span class="badge">DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">8 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">3200 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR4 DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">120€</div>
+                    <div class="price-per-gb">15€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR4 16GB</span>
+                    <span class="badge">DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">16 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">3200 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR4 DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">192€</div>
+                    <div class="price-per-gb">12€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR4 32GB</span>
+                    <span class="badge">DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">32 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">3200 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR4 DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">336€</div>
+                    <div class="price-per-gb">10.50€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="color: #66ffcc; margin: 40px 0 20px 0; text-align: center;">🚀 DDR4 - Format SO-DIMM</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR4 8GB</span>
+                    <span class="badge">SO-DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">8 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">3200 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR4 SO-DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">132€</div>
+                    <div class="price-per-gb">16.50€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR4 16GB</span>
+                    <span class="badge">SO-DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">16 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">3200 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR4 SO-DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">216€</div>
+                    <div class="price-per-gb">13.50€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR4 32GB</span>
+                    <span class="badge">SO-DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">32 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">3200 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR4 SO-DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">384€</div>
+                    <div class="price-per-gb">12€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="color: #66ffcc; margin: 40px 0 20px 0; text-align: center;">⚡ DDR5 - Format DIMM</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR5 16GB</span>
+                    <span class="badge">DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">16 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">5600 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR5 DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">240€</div>
+                    <div class="price-per-gb">15€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR5 32GB</span>
+                    <span class="badge">DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">32 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">5600 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR5 DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">432€</div>
+                    <div class="price-per-gb">13.50€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR5 64GB</span>
+                    <span class="badge">DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">64 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">6000 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR5 DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">768€</div>
+                    <div class="price-per-gb">12€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="color: #66ffcc; margin: 40px 0 20px 0; text-align: center;">⚡ DDR5 - Format SO-DIMM</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR5 16GB</span>
+                    <span class="badge">SO-DIMM</span>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">16 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">5600 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR5 SO-DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">292€</div>
+                    <div class="price-per-gb">18€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="product-type">DDR5 32GB</span>
+                    <span class="badge">SO-DIMM</span>
+                </div>
+		 <div class="specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Capacité</span>
+                        <span class="spec-value">16 Go</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fréquence</span>
+                        <span class="spec-value">5600 MHz</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Type</span>
+                        <span class="spec-value">DDR5 SO-DIMM</span>
+                    </div>
+                </div>
+                <div class="price-section">
+                    <div class="price">496€</div>
+                    <div class="price-per-gb">45€/Go</div>
+                    <button class="buy-button">Commander</button>
+                </div>
+                <div class="specs">
+                    <div class="spec-item">
+                        
